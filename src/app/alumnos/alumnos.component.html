@@ -1,0 +1,48 @@
+<ActionBar title="Estudiantes">
+  <NavigationButton text="Menú" android.systemIcon="ic_menu_more" (tap)="menu()"></NavigationButton>
+  <ActionItem text="Menú" ios.position="left" (tap)="menu()"></ActionItem>
+</ActionBar>
+<GridLayout rows="auto, *" class="pagina" (loaded)="actualizar()">
+  <Label row="0" *ngIf="mensaje" [text]="mensaje" class="mensaje mensaje-panel" textWrap="true"></Label>
+
+  <ScrollView row="1">
+    <StackLayout class="lista">
+      <StackLayout *ngFor="let alumno of datos.alumnos; trackBy: porId" class="tarjeta">
+
+        <!-- Resumen: foto, nombre y promedio -->
+        <GridLayout columns="auto, *">
+          <Image col="0" [src]="alumno.foto" class="avatar" stretch="aspectFill"></Image>
+          <StackLayout col="1" verticalAlignment="center">
+            <Label [text]="alumno.nombre" class="titulo" textWrap="true"></Label>
+            <Label [text]="'Promedio: ' + promedio(alumno)" class="chip"></Label>
+            <Label [text]="'Dirección: ' + alumno.direccion.lat + ', ' + alumno.direccion.lng" class="hora" textWrap="true"></Label>
+          </StackLayout>
+        </GridLayout>
+
+        <!-- Acciones nativas -->
+        <GridLayout columns="*, *" rows="auto, auto" class="acciones">
+          <Button row="0" col="0" text="Tomar foto" class="boton-primario" [isEnabled]="!ocupada" (tap)="tomarFoto(alumno)"></Button>
+          <Button row="0" col="1" text="Compartir foto" class="boton-sec" (tap)="compartirFoto(alumno)"></Button>
+          <Button row="1" col="0" text="Compartir promedio" class="boton-sec" (tap)="compartirPromedio(alumno)"></Button>
+          <Button row="1" col="1" text="Ver en mapa" class="boton-sec" (tap)="verDireccion(alumno)"></Button>
+        </GridLayout>
+
+        <Button [text]="abierto === alumno.id ? 'Ocultar edición' : 'Editar nombre y notas'" class="boton-texto" (tap)="alternarEdicion(alumno.id)"></Button>
+
+        <!-- Edición (se despliega al pulsar) -->
+        <StackLayout *ngIf="abierto === alumno.id" class="edicion">
+          <Label text="Nombre" class="etiqueta-campo"></Label>
+          <TextField #nombre [text]="alumno.nombre" hint="Nombre del alumno" class="campo"></TextField>
+          <Button text="Guardar nombre" class="boton-sec" (tap)="guardarNombre(alumno.id, $any(nombre).text)"></Button>
+
+          <StackLayout *ngFor="let materia of alumno.materias">
+            <Label [text]="materia.nombre + ' (actual: ' + materia.calificacion + ')'" class="etiqueta-campo"></Label>
+            <TextField #nota [text]="'' + materia.calificacion" keyboardType="number" hint="Calificación de 0 a 100" class="campo"></TextField>
+            <Button text="Guardar calificación" class="boton-sec" (tap)="guardarCalificacion(alumno.id, materia.nombre, $any(nota).text)"></Button>
+          </StackLayout>
+        </StackLayout>
+
+      </StackLayout>
+    </StackLayout>
+  </ScrollView>
+</GridLayout>

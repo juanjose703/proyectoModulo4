@@ -1,0 +1,15 @@
+<RadSideDrawer>
+  <ScrollView tkDrawerContent class="menu">
+    <StackLayout>
+      <StackLayout class="drawer-cabecera">
+        <Label text="Aula Móvil" class="drawer-titulo"></Label>
+        <Label text="Estudiantes, cámara, mapas y avisos" class="drawer-subtitulo" textWrap="true"></Label>
+      </StackLayout>
+      <Label text="Estudiantes" class="drawer-item" [class.drawer-item-activo]="esActiva('/alumnos')" (tap)="navegar('/alumnos')"></Label>
+      <Label text="Notificaciones" class="drawer-item" [class.drawer-item-activo]="esActiva('/notificaciones')" (tap)="navegar('/notificaciones')"></Label>
+    </StackLayout>
+  </ScrollView>
+  <GridLayout tkMainContent>
+    <page-router-outlet></page-router-outlet>
+  </GridLayout>
+</RadSideDrawer>

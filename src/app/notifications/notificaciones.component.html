@@ -1,0 +1,35 @@
+<ActionBar title="Notificaciones">
+  <NavigationButton text="Menú" android.systemIcon="ic_menu_more" (tap)="menu()"></NavigationButton>
+  <ActionItem text="Menú" ios.position="left" (tap)="menu()"></ActionItem>
+</ActionBar>
+<GridLayout rows="auto, auto, *" class="pagina">
+
+  <StackLayout row="0" class="panel">
+    <Label text="Estado de Firebase" class="etiqueta-campo"></Label>
+    <Label [text]="etiqueta(notificaciones.estado$ | async)" class="estado" textWrap="true"></Label>
+
+    <Label text="Token del dispositivo (FCM)" class="etiqueta-campo"></Label>
+    <Label [text]="(notificaciones.token$ | async) || 'Aún no hay token. Se genera cuando Firebase está activo.'"
+           class="token" textWrap="true"></Label>
+
+    <GridLayout columns="*, *">
+      <Button col="0" text="Compartir token" class="boton-primario" [isEnabled]="!!(notificaciones.token$ | async)"
+              (tap)="compartirToken()"></Button>
+      <Button col="1" text="Probar toast" class="boton-sec" (tap)="probarToast()"></Button>
+    </GridLayout>
+    <Label [text]="mensaje" class="mensaje" textWrap="true"></Label>
+  </StackLayout>
+
+  <Label row="1" text="Mensajes recibidos" class="seccion"></Label>
+
+  <Label row="2" *ngIf="!(notificaciones.historial$ | async)?.length" class="vacio" textWrap="true"
+         text="Todavía no llegó ninguna notificación. Envía una desde Firebase Console → Messaging usando el token."></Label>
+  <ListView row="2" [items]="notificaciones.historial$ | async" separatorColor="transparent">
+    <ng-template let-mensaje="item">
+      <StackLayout class="tarjeta">
+        <Label [text]="mensaje.texto" class="dato" textWrap="true"></Label>
+        <Label [text]="'Recibido a las ' + mensaje.hora" class="hora"></Label>
+      </StackLayout>
+    </ng-template>
+  </ListView>
+</GridLayout>

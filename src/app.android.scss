@@ -1,0 +1,5 @@
+@import 'app-common';
+
+// Android: estilo Material
+.tarjeta { border-radius: 4; border-left-width: 5; border-left-color: $acento; }
+.campo, .boton-primario, .boton-sec { border-radius: 4; }

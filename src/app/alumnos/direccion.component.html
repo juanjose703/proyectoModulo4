@@ -1,0 +1,23 @@
+<ActionBar title="Dirección en el mapa"></ActionBar>
+<GridLayout rows="auto, *" class="pagina">
+  <StackLayout row="0" class="panel">
+    <Label [text]="alumno ? alumno.nombre : 'Alumno no encontrado'" class="titulo"></Label>
+    <GridLayout columns="*, *" *ngIf="alumno">
+      <TextField col="0" hint="Latitud" [(ngModel)]="lat" class="campo" keyboardType="number"></TextField>
+      <TextField col="1" hint="Longitud" [(ngModel)]="lng" class="campo" keyboardType="number"></TextField>
+    </GridLayout>
+    <GridLayout columns="*, auto">
+      <Button col="0" *ngIf="alumno" text="Aplicar coordenadas" class="boton-primario" (tap)="guardar()"></Button>
+      <Button col="1" text="Volver" class="boton-sec" (tap)="volver()"></Button>
+    </GridLayout>
+    <Label [text]="mensaje" class="mensaje" textWrap="true"></Label>
+  </StackLayout>
+
+  <!-- Google Maps: el marker se coloca con addMarker() en direccion.component.ts -->
+  <MapView row="1" *ngIf="mapaHabilitado && alumno"
+    [lat]="alumno.direccion.lat" [lng]="alumno.direccion.lng" [zoom]="15"
+    (ready)="listo($any($event))" (mapTap)="seleccionar($any($event))"></MapView>
+
+  <Label row="1" *ngIf="!mapaHabilitado" class="vacio" verticalAlignment="top"
+    text="El mapa requiere tu clave de Google Maps (GOOGLE_MAPS_ANDROID_KEY o GOOGLE_MAPS_IOS_KEY en .env). Mientras tanto puedes editar las coordenadas manualmente." textWrap="true"></Label>
+</GridLayout>

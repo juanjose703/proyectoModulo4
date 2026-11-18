@@ -1,0 +1,6 @@
+@import 'app-common';
+
+// iOS: esquinas más redondeadas
+.tarjeta { border-radius: 14; }
+.campo { border-radius: 10; }
+.boton-primario, .boton-sec { border-radius: 12; }
